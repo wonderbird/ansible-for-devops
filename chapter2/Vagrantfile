@@ -1,0 +1,18 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.provider "tart" do |tart|
+    tart.image = "ghcr.io/cirruslabs/fedora:latest"
+    tart.name = "fedora"
+    tart.disk = 20
+  end
+
+  config.ssh.username = "admin"
+  config.ssh.password = "admin"
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbook.yml"
+  end
+end
