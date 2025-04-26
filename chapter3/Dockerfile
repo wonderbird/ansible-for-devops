@@ -3,6 +3,7 @@ FROM ubuntu:24.10
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     openssh-server \
+    python3 \
     && rm -rf /var/lib/apt/lists/*
 
 # Setup the SSH server for user "vagrant", which is used by Vagrant by default.
