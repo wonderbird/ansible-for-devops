@@ -1,4 +1,12 @@
 # Adopted from https://circleci.com/blog/ssh-into-docker-container/
+#
+# CAVEAT
+#
+# This Dockerfile does not work with the Ansible for DevOps book yet,
+# because the Ansible playbook requires a systemd-based container.
+# The Fedora container has been updated to use systemd. You can use
+# that to see which changes are required here to make systemd work.
+#
 FROM ubuntu:24.10
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
