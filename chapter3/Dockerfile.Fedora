@@ -2,6 +2,7 @@
 FROM fedora:43
 
 RUN dnf5 -y update && dnf5 -y install \
+        cronie \
         hostname \
         openssh-server \
         procps-ng \
