@@ -4,6 +4,10 @@ Chapter by chapter I provide my version of prerequisites and supplementary
 material, so that one can follow along with the examples in the Ansible for
 DevOps book.
 
+## Acknowledgements
+
+This project uses code, documentation and ideas generated with the assistance of large language models.
+
 ## References
 
 J. Geerling, _Ansible for DevOps_, 2nd ed. Leanpub, 2023. Accessed: Apr. 20,
