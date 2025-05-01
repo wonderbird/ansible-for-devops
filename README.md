@@ -19,8 +19,12 @@ instead. The [Vagrantfile](./Vagrantfile), [ansible.cfg](./ansible.cfg) and
 [hosts.ini](./hosts.ini) in the root directory of this repository use that
 setup.
 
-The Dockerfiles located in this directory provide Ubuntu and Fedora servers
-with SSH access and systemd.
+If some of the subdirectories contain a separate Vagrantfile, ansible.cfg and
+hosts.ini, then these files are used instead for the exercise instead of the
+ones in the root directory.
+
+The Dockerfiles located in this directory provide Ubuntu, Fedora and Rocky Linux
+servers with SSH access and systemd.
 
 The key pair `id_ecdsa*` was generated with the following command line without a
 password (`-N ""`):

@@ -1,0 +1,24 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.ssh.insert_key = false
+  config.ssh.private_key_path = ["../../ssh_user_key/id_ecdsa"]
+  
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  
+  config.vm.provider "docker" do |d|
+    d.build_dir = "../.."
+    d.dockerfile = "./Dockerfile.Fedora"
+    d.create_args = ["--privileged"]
+    d.has_ssh = true
+  end
+
+  # Application server
+  config.vm.define "app" do |app|
+    app.vm.hostname = "app"
+    app.vm.network :private_network, ip: "192.168.56.4"
+    app.vm.network :forwarded_port, guest: 22, host: 2223, id: "ssh", auto_correct: true
+  end
+end

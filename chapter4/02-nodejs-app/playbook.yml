@@ -1,0 +1,76 @@
+---
+- hosts: all
+  become: yes
+
+  vars:
+    node_apps_location: /usr/local/opt/node
+
+  tasks:
+    # Prerequisite for REMI: RMP Fusion
+    # see https://blog.remirepo.net/pages/Config-en
+    # and https://rpmfusion.org/Configuration
+    - name: Download RPM Fusion GPG keys
+      dnf: name=distribution-gpg-keys state=present
+
+    - name: Import RPM Fusion free GPG key
+      rpm_key:
+        key: "/usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-free-fedora-42"
+        state: present
+
+    - name: Import RPM Fusion non-free GPG key
+      rpm_key:
+        key: "/usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-nonfree-fedora-42"
+        state: present
+
+    - name: Install RPM Fusion free
+      dnf:
+        name: "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm"
+        state: present
+    
+    - name: Install RPM Fusion non-free
+      dnf:
+        name: "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm"
+        state: present
+
+    - name: Enable openh264 library
+      command: "/usr/bin/dnf config-manager setopt fedora-cisco-openh264.enabled=1"
+
+    # When Remi repo is installed via dnf, then no need to import the GPG key
+    # see https://blog.remirepo.net/pages/Config-en
+#    - name: Import Remi GPG key
+#      rpm_key:
+#        key: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2025"
+#        state: present
+
+    - name: Install Remi repo
+      dnf:
+        name: "https://rpms.remirepo.net/fedora/remi-release-42.rpm"
+        state: present
+    
+    # On this system, firewalld is not installed
+#    - name: Ensure firewalld is stopped (since this is for testing).
+#      service: name=firewalld state=stopped
+
+    - name: Install Node.js and npm
+      dnf: name=npm state=present enablerepo=remi,remi-modular
+    
+    - name: Install Forever (to run our Node.js app)
+      npm: name=forever global=yes state=present
+
+    - name: Ensure Node.js app folder exists
+      file: "path={{ node_apps_location }} state=directory"
+    
+    - name: Copy example Node.js ap to server
+      copy: "src=app dest={{ node_apps_location }}"
+
+    - name: Install app dependencies defined in package.json
+      npm: path={{ node_apps_location }}/app
+
+    - name: Check list of running Node.js node_apps_location
+      command: /usr/local/bin/forever list
+      register: forever_list
+      changed_when: false
+
+    - name: Start example Node.js app
+      command: "/usr/local/bin/forever start {{ node_apps_location }}/app/app.js"
+      when: "forever_list.stdout.find(node_apps_location + '/app/app.js') == -1"

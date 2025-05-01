@@ -1,20 +1,42 @@
-# Adopted from https://circleci.com/blog/ssh-into-docker-container/
-FROM fedora:42
+# Adopted from https://hub.docker.com/r/rockylinux/rockylinux
+# and from https://github.com/geerlingguy/docker-rockylinux8-ansible/blob/master/Dockerfile
+FROM rockylinux/rockylinux:8
 ENV container=docker
 
-RUN dnf5 -y update && dnf5 -y install \
+# See: https://github.com/geerlingguy/docker-rockylinux8-ansible/issues/6
+ENV pip_packages="ansible<10.0"
+
+RUN yum -y install \
+        rpm \
+        dnf-plugins-core \
+    && yum -y update \
+    && yum -y config-manager --set-enabled powertools \
+    && yum -y install \
         cronie \
+        epel-release \
+        initscripts \
+        sudo \
+        which \
         hostname \
-        gnupg \
+        iproute \
+        libyaml-devel \
         openssh-server \
         procps-ng \
         python3 \
-        python3-libdnf5 \
+        python3-pip \
+        python3-pyyaml \
         python3-packaging \
-        sudo \
         systemd \
-        which \
-    && dnf5 clean all
+    && yum clean all
+
+# Upgrade pip to latest version.
+RUN pip3 install --upgrade pip
+
+# Install Ansible via Pip.
+RUN pip3 install $pip_packages
+
+# Disable requiretty.
+RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
 
 # Enable systemd and allow multiple users to log in
 # by commenting the line that restricts it.
@@ -25,7 +47,7 @@ RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == system
     rm -f /lib/systemd/system/local-fs.target.wants/*; \
     rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
     rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-    rm -f /lib/systemd/system/basic.target.wants/*;\
+    rm -f /libls/systemd/system/basic.target.wants/*;\
     rm -f /lib/systemd/system/anaconda.target.wants/*;\
     systemctl enable sshd;
 
@@ -51,5 +73,6 @@ RUN chmod 700 /home/vagrant/.ssh \
     && chown -R vagrant:vagrant /home/vagrant/.ssh
 
 EXPOSE 22
+EXPOSE 80
 
-ENTRYPOINT [ "/usr/sbin/init" ]
+ENTRYPOINT [ "/usr/lib/systemd/systemd" ]
