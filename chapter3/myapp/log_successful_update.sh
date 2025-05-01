@@ -4,9 +4,15 @@
 #
 
 SCRIPT_NAME=$(basename "$0")
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+OLD_DIR=$(pwd)
 
 DATE_TIME_ISO=$(date +"%Y-%m-%d %H:%M:%S")
 SHORT_LATEST_COMMIT_HASH=$(git rev-parse --short HEAD)
 
+cd "$SCRIPT_DIR" || exit 1
+
 echo "[$SCRIPT_NAME] The current time is $DATE_TIME_ISO"
 echo "[$SCRIPT_NAME] You are running version $SHORT_LATEST_COMMIT_HASH"
+
+cd "$OLD_DIR" || exit 1
