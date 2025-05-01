@@ -2,7 +2,7 @@
 #
 # Inform the user about successful update.
 #
-set -euxfo pipefail
+set -eufo pipefail
 
 SCRIPT_NAME=$(basename "$0")
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
