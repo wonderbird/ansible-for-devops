@@ -15,16 +15,13 @@ Chapter 2 uses the Tart provider for Vagrant. Thus, a separate
 
 At the time of writing, the Tart provider did not support multiple machines.
 Thus, starting with chapter 3, the Vagrant stack uses the Docker provider
-instead. The [Vagrantfile](./Vagrantfile), [ansible.cfg](./ansible.cfg) and
-[hosts.ini](./hosts.ini) in the root directory of this repository use that
-setup.
-
-If some of the subdirectories contain a separate Vagrantfile, ansible.cfg and
-hosts.ini, then these files are used instead for the exercise instead of the
-ones in the root directory.
+instead. The stack is configured by a Vagrantfile, an ansible.cfg and a
+hosts.ini file in the each directory subdirectory.
 
 The Dockerfiles located in this directory provide Ubuntu, Fedora and Rocky Linux
 servers with SSH access and systemd.
+
+### Static SSH Host Key
 
 The key pair `id_ecdsa*` was generated with the following command line without a
 password (`-N ""`):
@@ -39,9 +36,10 @@ It is automatically registered in the Docker container as the SSH key for the
 The host key is also predefined, so it remains the same even after changes to
 the Dockerfile.
 
-Configure the Dockerfile in the [Vagrantfile](./Vagrantfile).
-
 ### Starting the Stack
+
+For this documentation I assume that you are in the [chapter 3](./chapter3)
+directory.
 
 Before the first start, I recommend building the Docker image. This makes
 Vagrant start faster.
