@@ -48,6 +48,7 @@ RUN mkdir -p /home/vagrant/.ssh \
     && chown -R vagrant:vagrant /home/vagrant/.ssh
 
 EXPOSE 22
+EXPOSE 80
 
 # Use systemd as the entrypoint instead of the service command
 ENTRYPOINT ["/lib/systemd/systemd"]

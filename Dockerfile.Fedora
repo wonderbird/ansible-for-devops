@@ -51,5 +51,6 @@ RUN chmod 700 /home/vagrant/.ssh \
     && chown -R vagrant:vagrant /home/vagrant/.ssh
 
 EXPOSE 22
+EXPOSE 80
 
 ENTRYPOINT [ "/usr/sbin/init" ]

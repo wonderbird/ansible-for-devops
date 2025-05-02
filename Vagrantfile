@@ -20,6 +20,7 @@ Vagrant.configure("2") do |config|
     app1.vm.hostname = "app1"
     app1.vm.network :private_network, ip: "192.168.56.4"
     app1.vm.network :forwarded_port, guest: 22, host: 2223, id: "ssh", auto_correct: true
+    app1.vm.network :forwarded_port, guest: 80, host: 8083, id: "http", auto_correct: true
   end
 
   # Application server 2
@@ -27,6 +28,7 @@ Vagrant.configure("2") do |config|
     app2.vm.hostname = "app2"
     app2.vm.network :private_network, ip: "192.168.56.5"
     app2.vm.network :forwarded_port, guest: 22, host: 2224, id: "ssh", auto_correct: true
+    app1.vm.network :forwarded_port, guest: 80, host: 8084, id: "http", auto_correct: true
   end
 
   # Database server

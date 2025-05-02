@@ -35,12 +35,10 @@
     - name: Enable openh264 library
       command: "/usr/bin/dnf config-manager setopt fedora-cisco-openh264.enabled=1"
 
-    # When Remi repo is installed via dnf, then no need to import the GPG key
-    # see https://blog.remirepo.net/pages/Config-en
-#    - name: Import Remi GPG key
-#      rpm_key:
-#        key: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2025"
-#        state: present
+    - name: Import Remi GPG key
+      rpm_key:
+        key: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2025"
+        state: present
 
     - name: Install Remi repo
       dnf:
