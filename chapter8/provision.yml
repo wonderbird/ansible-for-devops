@@ -1,0 +1,21 @@
+---
+# Prerequisite:
+#
+# - Hetzner hcloud API token set in environment variable HCLOUD_TOKEN
+#
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: Create server
+      hetzner.hcloud.server:
+        state: present
+        name: ansible-test
+        server_type: "cx22"
+        image: centos-stream-10
+        location: hel1
+        ssh_keys: "stefan@Fangorn.fritz.box"
+      register: do
+
+    - debug: var=do
