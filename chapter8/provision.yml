@@ -18,4 +18,20 @@
         ssh_keys: "stefan@Fangorn.fritz.box"
       register: do
 
-    - debug: var=do
+    - name: Add host to our inventory
+      add_host:
+        hostname: "{{ do.hcloud_server.ipv4_address }}"
+        groups: do
+        ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+      when: do.hcloud_server is defined
+
+- hosts: do
+  remote_user: root
+  gather_facts: False
+
+  tasks:
+    - name: Wait for hosts to become reachable
+      wait_for_connection:
+
+    - name: Install tcpdump
+      package: name=tcpdump state=present
