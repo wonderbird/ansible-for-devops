@@ -41,7 +41,7 @@ ansible app -b -m file -a "path=/root/.ssh/tmp_github_host_keys state=absent"
 
 To install or update the application, run the following commands:
 
-```bash
+```shell
 # Clone or update the repository
 ansible app -b -m git -a "repo=https://github.com/wonderbird/ansible-for-devops.git dest=/opt/ansible-for-devops update=yes version=main"
 

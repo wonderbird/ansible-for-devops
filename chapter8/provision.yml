@@ -16,16 +16,16 @@
         image: centos-stream-10
         location: hel1
         ssh_keys: "stefan@Fangorn.fritz.box"
-      register: do
+      register: hetzner
 
     - name: Add host to our inventory
       add_host:
-        hostname: "{{ do.hcloud_server.ipv4_address }}"
-        groups: do
+        hostname: "{{ hetzner.hcloud_server.ipv4_address }}"
+        groups: hetzner
         ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
-      when: do.hcloud_server is defined
+      when: hetzner.hcloud_server is defined
 
-- hosts: do
+- hosts: hetzner
   remote_user: root
   gather_facts: False
 
